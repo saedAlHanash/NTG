@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">NTG test</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create_category">Create new category</string>
+    <string name="category_name">Category Name</string>
+    <string name="create">Create</string>
+    <string name="create_asset">Create Asset</string>
+    <string name="asset_description">Description</string>
+    <string name="barcode">Barcode</string>
+    <string name="select_category">Select category from list</string>
+    <string name="done">Done</string>
+    <string name="list_select_category">Select Category</string>
+    <string name="search_text">Search by Code</string>
+    <string name="scan">Search by Scan</string>
+    <string name="search">Search</string>
+</resources>
