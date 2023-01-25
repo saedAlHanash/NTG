@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
 
 
 @SuppressLint("NonConstantResourceId")
-public class AddAssetFragment extends Fragment implements View.OnClickListener {
+public class AddAssetFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     //region GLOBAL VAR
 
@@ -49,18 +49,20 @@ public class AddAssetFragment extends Fragment implements View.OnClickListener {
     AppCompatButton create_btn;
     //endregion
 
+    final ArrayList<String> catName = new ArrayList<>();
+    final List<Category> categories = new ArrayList<>();
+    ArrayAdapter<String> adapterMapType;
+
+    /**
+     * spinner selected item (to get category ID)
+     */
+    int selectedId = -1;
+
     MainActivity myActivity;
     AssetViewModel assetViewModel;
     View view;
 
     //endregion
-
-    final ArrayList<String> catName = new ArrayList<>();
-    final List<Category> categories = new ArrayList<>();
-    ArrayAdapter<String> adapterMapType;
-
-
-    int selectedId = -1;
 
 
     void initConstructor(@Nullable Bundle bundle) {
@@ -71,8 +73,10 @@ public class AddAssetFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         myActivity = (MainActivity) requireActivity();
         assetViewModel = myActivity.assetViewModel;
+
         view = inflater.inflate(R.layout.fragment_add_asset, container, false);
         ButterKnife.bind(this, view);
         initConstructor(getArguments());
@@ -88,6 +92,8 @@ public class AddAssetFragment extends Fragment implements View.OnClickListener {
         create_btn.setOnClickListener(this);
     }
 
+    //region init Views
+
     void initSpinner() {
 
         adapterMapType = new ArrayAdapter<>(myActivity,
@@ -97,37 +103,8 @@ public class AddAssetFragment extends Fragment implements View.OnClickListener {
 
         spinnerCatId.setAdapter(adapterMapType);
 
-        spinnerCatId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0)
-                    selectedId = -1;
-                else
-                    selectedId = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+        spinnerCatId.setOnItemSelectedListener(this);
     }
-
-    void getAllCategories() {
-        var liveData = assetViewModel.getCategories(myActivity.db);
-
-        liveData.observe(myActivity, allCategoriesObserver);
-    }
-
-    final Observer<Pair<List<Category>, String>> allCategoriesObserver = pair -> {
-        if (!isAdded())
-            return;
-        if (pair.first != null) {
-            initNameList(pair.first);
-            categories.addAll(pair.first);
-        } else
-            //TODO : show snackBar
-            Toast.makeText(myActivity, pair.second, Toast.LENGTH_SHORT).show();
-    };
 
     void initNameList(List<Category> list) {
         catName.clear();
@@ -136,29 +113,6 @@ public class AddAssetFragment extends Fragment implements View.OnClickListener {
         catName.add(0, getString(R.string.list_select_category));
 
         initSpinner();
-    }
-
-    void insertAssetDB() {
-        var mDescription = Objects.requireNonNull(description_et.getText()).toString();
-        var mBarcode = Objects.requireNonNull(barcode_et.getText()).toString();
-
-        if (!checkFields())
-            return;
-
-        var mCategoryId = categories.get(selectedId - 1).getCategoryId();
-
-        var model = new AssetModel(mBarcode, mDescription, mCategoryId);
-
-        assetViewModel.insertAsset(myActivity.db, model).observe(myActivity, pair -> {
-            if (!isAdded())
-                return;
-            if (pair.first != null) {
-                Toast.makeText(myActivity, getString(R.string.done), Toast.LENGTH_SHORT).show();
-                myActivity.onBackPressed();
-            } else
-                //TODO : show snackBar
-                Toast.makeText(myActivity, pair.second, Toast.LENGTH_SHORT).show();
-        });
     }
 
     boolean checkFields() {
@@ -184,15 +138,84 @@ public class AddAssetFragment extends Fragment implements View.OnClickListener {
         return true;
     }
 
+    //endregion
+
+    //region DB access
+
+    void getAllCategories() {
+        var liveData = assetViewModel.getCategories(myActivity.db);
+
+        liveData.observe(myActivity, allCategoriesObserver);
+    }
+
+    void insertAssetDB() {
+        var mDescription = Objects.requireNonNull(description_et.getText()).toString();
+        var mBarcode = Objects.requireNonNull(barcode_et.getText()).toString();
+
+        if (!checkFields())
+            return;
+
+        var mCategoryId = categories.get(selectedId - 1).getCategoryId();
+
+        var model = new AssetModel(mBarcode, mDescription, mCategoryId);
+
+        assetViewModel.insertAsset(myActivity.db, model).observe(myActivity, pair -> {
+            if (!isAdded())
+                return;
+            if (pair.first != null) {
+                Toast.makeText(myActivity, getString(R.string.done), Toast.LENGTH_SHORT).show();
+                myActivity.onBackPressed();
+            } else
+                //TODO : show snackBar
+                Toast.makeText(myActivity, pair.second, Toast.LENGTH_SHORT).show();
+        });
+    }
+    //endregion
+
+    //region observers
+
+    final Observer<Pair<List<Category>, String>> allCategoriesObserver = pair -> {
+        if (!isAdded())
+            return;
+        if (pair.first != null) {
+            initNameList(pair.first);
+            categories.addAll(pair.first);
+        } else
+            //TODO : show snackBar
+            Toast.makeText(myActivity, pair.second, Toast.LENGTH_SHORT).show();
+    };
+    //endregion
+
+    //region listeners
+
+
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.create_btn)
             insertAssetDB();
     }
 
+    //region spinner listener
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        if (i == 0)
+            selectedId = -1;
+        else
+            selectedId = i;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+    }
+    //endregion
+
+    //endregion
+
     @Override
     public void onDestroy() {
         assetViewModel.categoryLiveData.removeObserver(allCategoriesObserver);
         super.onDestroy();
     }
+
 }

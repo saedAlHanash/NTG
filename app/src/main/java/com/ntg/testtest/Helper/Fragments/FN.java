@@ -1,5 +1,8 @@
 package com.ntg.testtest.Helper.Fragments;
 
+/**
+ * Fragments Names
+ */
 public class FN {
     public static final String ADD_CATEGORY_FN = "1";
     public static final String ADD_ASSET_FN = "2";

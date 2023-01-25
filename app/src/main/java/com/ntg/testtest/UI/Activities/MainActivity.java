@@ -24,7 +24,6 @@ import com.ntg.testtest.ViewModel.AssetViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
-
     public AssetViewModel assetViewModel;
     public Database db;
 
@@ -37,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
         assetViewModel = new ViewModelProvider(this)
                 .get(AssetViewModel.class);//init view model
-
 
     }
 
@@ -83,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
         handler.sendMessage(message);
     }
     //endregion
-
 
     @IntDef({
             FragmentsKeys.ADD_CATEGORY,

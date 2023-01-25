@@ -10,22 +10,21 @@ import com.ntg.testtest.DB.DAO.CategoryDAO;
 import com.ntg.testtest.Models.AssetModel;
 import com.ntg.testtest.Models.Category;
 
-@androidx.room.Database(entities = {AssetModel.class, Category.class}, version = 7, exportSchema = false)
+@androidx.room.Database(entities = {AssetModel.class, Category.class},
+        version = 2, exportSchema = false)
 public abstract class Database extends RoomDatabase {
 
     /**
      * singleton instance
      */
     private static Database instance;
-
-    public abstract AssetsDAO assetsDAO();
-    public abstract CategoryDAO categoryDAO();
-
     /**
      * name database
      */
     public static String DB_name = "assets_database";
 
+    public abstract AssetsDAO assetsDAO();
+    public abstract CategoryDAO categoryDAO();
 
     public static synchronized Database getInstance(Context context) {
 
