@@ -24,6 +24,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanIntentResult;
 import com.journeyapps.barcodescanner.ScanOptions;
+import com.ntg.testtest.Helper.BarcodeHelper;
 import com.ntg.testtest.Models.FullModel;
 import com.ntg.testtest.R;
 import com.ntg.testtest.UI.Activities.MainActivity;
@@ -149,18 +150,16 @@ public class ScanFragment extends Fragment implements
     }
 
     void generateBarcode() {
-        try {
-            var randomBarcode = ThreadLocalRandom.current().nextInt(1, 10 + 1);
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            Bitmap bitmap = barcodeEncoder.encodeBitmap(
-                    String.valueOf(randomBarcode), BarcodeFormat.QR_CODE,
-                    qr_code_image.getWidth(),
-                    qr_code_image.getHeight());
 
-            qr_code_image.setImageBitmap(bitmap);
-            code_generated.setText(String.valueOf(randomBarcode));
-        } catch (Exception ignored) {
-        }
+        var randomBarcode = ThreadLocalRandom.current().nextInt(1, 10 + 1);
+        var width = qr_code_image.getWidth();
+        var height = qr_code_image.getHeight();
+        var bitmap = BarcodeHelper.generateBarcode(
+                String.valueOf(randomBarcode), height, width);
+
+        //you can set null
+        qr_code_image.setImageBitmap(bitmap);
+        code_generated.setText(String.valueOf(randomBarcode));
     }
 
     //region show/hied

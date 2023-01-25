@@ -11,17 +11,21 @@
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/drawable/ic_baseline_arrow_drop_down_24.xml" value="0.133" />
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/drawable/ic_category_add_svgrepo_com.xml" value="0.133" />
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/drawable/ic_doc_text_search_svgrepo_com.xml" value="0.133" />
+        <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/drawable/ic_list.xml" value="0.1485" />
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/drawable/ic_qr.xml" value="0.133" />
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/drawable/ic_qr_create.xml" value="0.133" />
+        <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/drawable/ic_resource_import.xml" value="0.1485" />
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/layout/activity_main.xml" value="0.209375" />
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/layout/activity_splash.xml" value="0.1953125" />
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/layout/custom_snackbar_view.xml" value="0.2037037037037037" />
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/layout/driver_info_layout.xml" value="0.33" />
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/layout/fragment_add_asset.xml" value="0.33" />
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/layout/fragment_add_category.xml" value="0.25" />
+        <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/layout/fragment_list_barcods.xml" value="0.25" />
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/layout/fragment_scan.xml" value="0.25" />
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/layout/fragment_search.xml" value="0.33" />
-        <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/layout/fragment_select.xml" value="0.25" />
+        <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/layout/fragment_select.xml" value="0.22" />
+        <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/layout/item_barcode.xml" value="0.33" />
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/layout/item_spinner.xml" value="0.209375" />
         <entry key="..\:/Users/saed/AndroidStudioProjects/NTGtest/app/src/main/res/layout/item_spinner_drop.xml" value="0.209375" />
       </map>

@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 
@@ -38,6 +39,9 @@ public class AssetModel {
         this.barcode = barcode;
         this.categoryId = categoryId;
     }
+    @Ignore
+    public AssetModel() {
+    }
 
     @NonNull
     public String getBarcode() {
@@ -57,6 +61,7 @@ public class AssetModel {
     }
 
     public long getCategoryId() {
+
         return categoryId;
     }
 

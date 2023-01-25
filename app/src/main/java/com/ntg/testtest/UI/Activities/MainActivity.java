@@ -5,21 +5,30 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import com.ntg.testtest.DB.Database;
 import com.ntg.testtest.Helper.Fragments.FC;
 import com.ntg.testtest.Helper.Fragments.FN;
 import com.ntg.testtest.Helper.Fragments.FTH;
+import com.ntg.testtest.Helper.ImportHelper;
 import com.ntg.testtest.R;
 import com.ntg.testtest.UI.Fragments.AddAssetFragment;
 import com.ntg.testtest.UI.Fragments.AddCategoryFragment;
+import com.ntg.testtest.UI.Fragments.ListBarcodesFragment;
 import com.ntg.testtest.UI.Fragments.ScanFragment;
 import com.ntg.testtest.UI.Fragments.SearchFragment;
 import com.ntg.testtest.ViewModel.AssetViewModel;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         assetViewModel = new ViewModelProvider(this)
                 .get(AssetViewModel.class);//init view model
+
 
     }
 
@@ -68,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
                             ScanFragment.class, null, FN.SCAN_FN);
                     break;
                 }
+                case FragmentsKeys.ALL_ASSETS: {
+                    FTH.addFadeFragmentUpFragment(FC.MAIN_C, MainActivity.this,
+                            ListBarcodesFragment.class, null, FN.ALL_ASSETS_FN);
+                    break;
+                }
 
             }
         }
@@ -87,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
             FragmentsKeys.ADD_ASSET,
             FragmentsKeys.SEARCH_NAME,
             FragmentsKeys.SCAN,
+            FragmentsKeys.ALL_ASSETS,
     })
     public @interface FragmentsKeys {
 
@@ -94,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         int ADD_ASSET = 1;
         int SEARCH_NAME = 2;
         int SCAN = 3;
+        int ALL_ASSETS = 4;
     }
 
     private static final String TAG = "MainActivity__";

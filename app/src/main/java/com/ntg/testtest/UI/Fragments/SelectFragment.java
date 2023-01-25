@@ -22,6 +22,8 @@ import butterknife.ButterKnife;
 @SuppressLint("NonConstantResourceId")
 public class SelectFragment extends Fragment implements View.OnClickListener {
 
+    //region Views
+
     @BindView(R.id.add_category_card)
     MaterialCardView add_category_card;
     @BindView(R.id.add_asset_card)
@@ -30,6 +32,11 @@ public class SelectFragment extends Fragment implements View.OnClickListener {
     MaterialCardView scan_card;
     @BindView(R.id.search_card)
     MaterialCardView search_card;
+    @BindView(R.id.show_all_card)
+    MaterialCardView show_all_card;
+    @BindView(R.id.import_card)
+    MaterialCardView import_card;
+    //endregion
 
     MainActivity myActivity;
 
@@ -58,8 +65,9 @@ public class SelectFragment extends Fragment implements View.OnClickListener {
         add_asset_card.setOnClickListener(this);
         scan_card.setOnClickListener(this);
         search_card.setOnClickListener(this);
+        show_all_card.setOnClickListener(this);
+        import_card.setOnClickListener(this);
     }
-
 
     @Override
     public void onClick(View v) {
@@ -78,6 +86,13 @@ public class SelectFragment extends Fragment implements View.OnClickListener {
             }
             case R.id.search_card: {
                 myActivity.sendHandlerMessage(FragmentsKeys.SEARCH_NAME);
+                break;
+            }
+            case R.id.show_all_card: {
+                myActivity.sendHandlerMessage(FragmentsKeys.ALL_ASSETS);
+                break;
+            }
+            case R.id.import_card: {
                 break;
             }
         }

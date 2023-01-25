@@ -13,9 +13,18 @@ import io.reactivex.rxjava3.core.Single;
 
 @Dao
 public interface CategoryDAO {
+
     @Insert
     Completable insertCategory(Category model);
 
     @Query("SELECT * FROM category_table")
     Single<List<Category>> getAllCategories();
+
+    @Query("SELECT * FROM category_table" +
+            " WHERE category_id = (SELECT MAX(category_id)  FROM category_table)")
+    Category getLatestCategory();
+
+    @Query("SELECT * FROM category_table" +
+            " WHERE category_name = :name")
+    Category getCategory(String name);
 }

@@ -27,10 +27,12 @@ public class AssetViewModel extends ViewModel {
     public MutableLiveData<Pair<Boolean, String>> successLiveData = new MutableLiveData<>();
     public MutableLiveData<Pair<List<Category>, String>> categoryLiveData = new MutableLiveData<>();
     public MutableLiveData<Pair<FullModel, String>> assetLiveData;
+    public MutableLiveData<Pair<List<AssetModel>, String>> allAssetLiveData = new MutableLiveData<>();
 
     /**
      * add new category into data base
-     * @param db Data base instance
+     *
+     * @param db       Data base instance
      * @param category new category model
      * @return live data object to observe process
      */
@@ -62,6 +64,7 @@ public class AssetViewModel extends ViewModel {
 
     /**
      * get all categories from DB
+     *
      * @param db Data base instance
      * @return live data object to observe process
      */
@@ -94,7 +97,8 @@ public class AssetViewModel extends ViewModel {
 
     /**
      * add new Asset into data base
-     * @param db Data base instance
+     *
+     * @param db    Data base instance
      * @param model new category model
      * @return live data object to observe process
      */
@@ -123,12 +127,14 @@ public class AssetViewModel extends ViewModel {
                 });
         return successLiveData;
     }
+
     /**
      * get an asset from DB with barcode
+     *
      * @param db Data base instance
      * @return live data object to observe process
      */
-    public LiveData<Pair<FullModel, String>> getAsset(Database db, String  barcode) {
+    public LiveData<Pair<FullModel, String>> getAsset(Database db, String barcode) {
         assetLiveData = new MutableLiveData<>();
         db.assetsDAO()
                 .getAsset(barcode)
@@ -154,4 +160,31 @@ public class AssetViewModel extends ViewModel {
         return assetLiveData;
     }
 
+
+    public LiveData<Pair<List<AssetModel>, String>> getAllAssets(Database db) {
+        allAssetLiveData = new MutableLiveData<>();
+        db.assetsDAO()
+                .getAllAsset()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull List<AssetModel> categories) {
+                        allAssetLiveData.postValue(new Pair<>(categories, null));
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        assetLiveData.postValue(new Pair<>(null, e.getMessage()));
+                    }
+                });
+
+        return allAssetLiveData;
+
+    }
 }
