@@ -18,11 +18,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanIntentResult;
 import com.journeyapps.barcodescanner.ScanOptions;
+import com.ntg.testtest.Helper.BarcodeHelper;
 import com.ntg.testtest.Models.FullModel;
 import com.ntg.testtest.R;
 import com.ntg.testtest.UI.Activities.MainActivity;
@@ -38,6 +40,11 @@ import butterknife.ButterKnife;
 @SuppressLint("NonConstantResourceId")
 public class ScanFragment extends Fragment implements
         View.OnClickListener, ActivityResultCallback<ScanIntentResult> {
+
+    //region GLOBAL VAR
+
+
+    //region Views
 
     @BindView(R.id.scan_qr_card)
     MaterialCardView scan_qr_card;
@@ -58,10 +65,13 @@ public class ScanFragment extends Fragment implements
 
     @BindView(R.id.info)
     View info;
+    //endregion
 
     MainActivity myActivity;
     AssetViewModel assetViewModel;
     View view;
+
+    //endregion
 
     void initConstructor(@Nullable Bundle bundle) {
         if (bundle == null)
@@ -87,7 +97,6 @@ public class ScanFragment extends Fragment implements
         create_qr_card.setOnClickListener(this);
     }
 
-
     // Register the launcher and result handler
     final ActivityResultLauncher<ScanOptions> barcodeLauncher =
             registerForActivityResult(new ScanContract(), this);
@@ -104,6 +113,8 @@ public class ScanFragment extends Fragment implements
         assetViewModel.getAsset(myActivity.db, barcode).observe(myActivity, assetObserver);
     }
 
+    //region observers
+
     final Observer<Pair<FullModel, String>> assetObserver = pair -> {
 
         if (!isAdded())
@@ -111,18 +122,17 @@ public class ScanFragment extends Fragment implements
 
         if (pair.first != null) {
 
-            info.setVisibility(View.VISIBLE);
-            qr_code_image.setVisibility(View.GONE);
-            code_generated.setVisibility(View.GONE);
+            showAssetInfo();
 
             setInfo(pair.first);
+
         } else {
             info.setVisibility(View.GONE);
             Toast.makeText(myActivity, "Asset not found", Toast.LENGTH_SHORT).show();
         }
 
     };
-
+    //endregion
 
     @Override
     public void onClick(View v) {
@@ -132,27 +142,40 @@ public class ScanFragment extends Fragment implements
                 break;
             }
             case R.id.create_qr_card: {
-
-                info.setVisibility(View.GONE);
-                qr_code_image.setVisibility(View.VISIBLE);
-                code_generated.setVisibility(View.VISIBLE);
-
-                try {
-                    var randomBarcode = ThreadLocalRandom.current().nextInt(1, 10 + 1);
-                    BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                    Bitmap bitmap = barcodeEncoder.encodeBitmap(
-                            String.valueOf(randomBarcode), BarcodeFormat.QR_CODE,
-                            qr_code_image.getWidth(),
-                            qr_code_image.getHeight());
-
-                    qr_code_image.setImageBitmap(bitmap);
-                    code_generated.setText(String.valueOf(randomBarcode));
-                } catch (Exception ignored) {
-                }
+                showBarcode();
+                generateBarcode();
                 break;
             }
         }
     }
+
+    void generateBarcode() {
+
+        var randomBarcode = ThreadLocalRandom.current().nextInt(1, 10 + 1);
+        var width = qr_code_image.getWidth();
+        var height = qr_code_image.getHeight();
+        var bitmap = BarcodeHelper.generateBarcode(
+                String.valueOf(randomBarcode), height, width);
+
+        //you can set null
+        qr_code_image.setImageBitmap(bitmap);
+        code_generated.setText(String.valueOf(randomBarcode));
+    }
+
+    //region show/hied
+
+    void showBarcode() {
+        info.setVisibility(View.GONE);
+        qr_code_image.setVisibility(View.VISIBLE);
+        code_generated.setVisibility(View.VISIBLE);
+    }
+
+    void showAssetInfo() {
+        info.setVisibility(View.VISIBLE);
+        qr_code_image.setVisibility(View.GONE);
+        code_generated.setVisibility(View.GONE);
+    }
+    //endregion
 
     @Override
     public void onActivityResult(ScanIntentResult result) {

@@ -20,12 +20,14 @@ import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.ntg.testtest.Helper.BarcodeHelper;
 import com.ntg.testtest.Models.FullModel;
 import com.ntg.testtest.R;
 import com.ntg.testtest.UI.Activities.MainActivity;
 import com.ntg.testtest.ViewModel.AssetViewModel;
 
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,16 +83,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         description.setText(model.description);
         category_name.setText(model.categoryName);
 
-        try {
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            Bitmap bitmap = barcodeEncoder.encodeBitmap(
-                    model.barcode, BarcodeFormat.QR_CODE,
-                    qr_code_image.getWidth(),
-                    qr_code_image.getHeight());
 
-            qr_code_image.setImageBitmap(bitmap);
-        } catch (Exception ignored) {
-        }
+        var width = qr_code_image.getWidth();
+        var height = qr_code_image.getHeight();
+        var bitmap = BarcodeHelper.generateBarcode(
+                String.valueOf(model.barcode), height, width);
+
+        qr_code_image.setImageBitmap(bitmap);
+
     }
 
     void searchInDB(String barcode) {
@@ -107,7 +107,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         else
             Toast.makeText(myActivity, "Asset not found", Toast.LENGTH_SHORT).show();
     };
-
 
     @Override
     public void onClick(View v) {

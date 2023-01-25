@@ -27,7 +27,15 @@ public class AssetViewModel extends ViewModel {
     public MutableLiveData<Pair<Boolean, String>> successLiveData = new MutableLiveData<>();
     public MutableLiveData<Pair<List<Category>, String>> categoryLiveData = new MutableLiveData<>();
     public MutableLiveData<Pair<FullModel, String>> assetLiveData;
+    public MutableLiveData<Pair<List<AssetModel>, String>> allAssetLiveData = new MutableLiveData<>();
 
+    /**
+     * add new category into data base
+     *
+     * @param db       Data base instance
+     * @param category new category model
+     * @return live data object to observe process
+     */
     public LiveData<Pair<Boolean, String>> insertCategory(Database db, Category category) {
         db.categoryDAO()
                 .insertCategory(category)
@@ -54,6 +62,12 @@ public class AssetViewModel extends ViewModel {
         return successLiveData;
     }
 
+    /**
+     * get all categories from DB
+     *
+     * @param db Data base instance
+     * @return live data object to observe process
+     */
     public LiveData<Pair<List<Category>, String>> getCategories(Database db) {
         db.categoryDAO()
                 .getAllCategories()
@@ -81,6 +95,13 @@ public class AssetViewModel extends ViewModel {
         return categoryLiveData;
     }
 
+    /**
+     * add new Asset into data base
+     *
+     * @param db    Data base instance
+     * @param model new category model
+     * @return live data object to observe process
+     */
     public LiveData<Pair<Boolean, String>> insertAsset(Database db, AssetModel model) {
         db.assetsDAO()
                 .insertAsset(model)
@@ -107,10 +128,16 @@ public class AssetViewModel extends ViewModel {
         return successLiveData;
     }
 
-    public LiveData<Pair<FullModel, String>> getAsset(Database db, String  assetId) {
+    /**
+     * get an asset from DB with barcode
+     *
+     * @param db Data base instance
+     * @return live data object to observe process
+     */
+    public LiveData<Pair<FullModel, String>> getAsset(Database db, String barcode) {
         assetLiveData = new MutableLiveData<>();
         db.assetsDAO()
-                .getAsset(assetId)
+                .getAsset(barcode)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<>() {
@@ -133,4 +160,31 @@ public class AssetViewModel extends ViewModel {
         return assetLiveData;
     }
 
+
+    public LiveData<Pair<List<AssetModel>, String>> getAllAssets(Database db) {
+        allAssetLiveData = new MutableLiveData<>();
+        db.assetsDAO()
+                .getAllAsset()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull List<AssetModel> categories) {
+                        allAssetLiveData.postValue(new Pair<>(categories, null));
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        assetLiveData.postValue(new Pair<>(null, e.getMessage()));
+                    }
+                });
+
+        return allAssetLiveData;
+
+    }
 }

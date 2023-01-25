@@ -13,4 +13,6 @@
     <string name="search_text">Search by Code</string>
     <string name="scan">Search by Scan</string>
     <string name="search">Search</string>
+    <string name="import_exl_file">Import EXL</string>
+    <string name="show_all">Show all Barcodes</string>
 </resources>

@@ -26,14 +26,22 @@ import butterknife.ButterKnife;
 @SuppressLint("NonConstantResourceId")
 public class AddCategoryFragment extends Fragment implements View.OnClickListener {
 
+    //region GLOBAL VAR
+
+    //region Views
+
     @BindView(R.id.cat_name)
     EditText cat_name;
     @BindView(R.id.create_btn)
     AppCompatButton create_btn;
 
+    //endregion
+
     MainActivity myActivity;
     AssetViewModel assetViewModel;
     View view;
+
+    //endregion
 
     void initConstructor(@Nullable Bundle bundle) {
         if (bundle == null)
@@ -59,8 +67,9 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
         create_btn.setOnClickListener(this);
     }
 
+    //region DB access
 
-    void insertCategoryDV() {
+    void insertCategoryDB() {
         var name = cat_name.getText().toString();
         var model = new Category(name);
 
@@ -75,6 +84,7 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
                 Toast.makeText(myActivity, pair.second, Toast.LENGTH_SHORT).show();
         });
     }
+    //endregion
 
     boolean checkFields() {
         var mName = Objects.requireNonNull(cat_name.getText()).toString();
@@ -87,14 +97,17 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
         return true;
     }
 
+    //region listeners
+
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.create_btn) {
             if (!checkFields())
                 return;
 
-            insertCategoryDV();
+            insertCategoryDB();
         }
     }
+    //endregion
 
 }
